@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BoleteriaOnline.Web.Data;
 public class ApplicationDbContext : IdentityDbContext
 {
-    public virtual DbSet<Arco> Arcos { get; set; }
+    public virtual DbSet<Nodo> Nodos { get; set; }
     public virtual DbSet<Boleto> Boletos { get; set; }
     public virtual DbSet<Celda> Celdas { get; set; }
     public virtual DbSet<Cliente> Clientes { get; set; }
@@ -17,7 +17,6 @@ public class ApplicationDbContext : IdentityDbContext
     public virtual DbSet<Horario> Horarios { get; set; }
     public virtual DbSet<Pago> Pagos { get; set; }
     public virtual DbSet<Viaje> Viajes { get; set; }
-
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

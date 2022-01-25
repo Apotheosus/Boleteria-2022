@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using BoleteriaOnline.Core.Data.Enums;
 using BoleteriaOnline.Web.Data.Models;
-using BoleteriaOnline.Web.Data.Models.Enums;
 using BoleteriaOnline.Web.Extensions.Response;
 using BoleteriaOnline.Web.Repository.Interface;
 using BoleteriaOnline.Web.Services.Interface;
@@ -26,9 +26,6 @@ public class DestinoService : IDestinoService
     {
         try
         {
-            if (await _destinoRepository.ExistsDestinoAsync(destinoDto.Id))
-                return Error<Destino, DestinoResponse>(ErrorMessage.AlreadyExists);
-
             var destino = _mapper.Map<Destino>(destinoDto);
             if (!await _destinoRepository.CreateDestinoAsync(destino))
                 return Error<Destino, DestinoResponse>(ErrorMessage.CouldNotCreate);
@@ -102,14 +99,14 @@ public class DestinoService : IDestinoService
         }
     }
 
-    public async Task<WebResult<DestinoResponse>> UpdateDestinoAsync(DestinoRequest destinoDto)
+    public async Task<WebResult<DestinoResponse>> UpdateDestinoAsync(DestinoRequest destinoDto, long id)
     {
         try
         {
-            if (destinoDto.Id == 0)
+            if (id == 0)
                 return Error<Destino, DestinoResponse>(ErrorMessage.InvalidId);
 
-            var destino = await _destinoRepository.GetDestinoAsync(destinoDto.Id);
+            var destino = await _destinoRepository.GetDestinoAsync(id);
 
             if (destino == null)
                 return Error<Destino, DestinoResponse>(ErrorMessage.NotFound);
@@ -120,6 +117,10 @@ public class DestinoService : IDestinoService
                 return Error<Destino, DestinoResponse>(ErrorMessage.CouldNotUpdate);
 
             return Ok<Destino, DestinoResponse>(_mapper.Map<DestinoResponse>(destino), SuccessMessage.Modified);
+        }
+        catch (UniqueConstraintException)
+        {
+            return Error<Destino, DestinoResponse>(ErrorMessage.AlreadyExists);
         }
         catch (Exception ex)
         {

@@ -60,11 +60,11 @@ public class DestinosController : ControllerBase
         return Created(nameof(Get), destino);
     }
 
-    [HttpPatch]
+    [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WebResult<DestinoResponse>))]
-    public async Task<ActionResult<WebResult<DestinoResponse>>> UpdateDestino([FromBody] DestinoRequest destinoDto)
+    public async Task<ActionResult<WebResult<DestinoResponse>>> UpdateDestino([FromBody] DestinoRequest destinoDto, long id)
     {
-        var destino = await _destinoservice.UpdateDestinoAsync(destinoDto);
+        var destino = await _destinoservice.UpdateDestinoAsync(destinoDto, id);
 
         if (!destino.Success)
             return StatusCode(ResponseHelper.GetHttpError(destino.ErrorCode), destino);

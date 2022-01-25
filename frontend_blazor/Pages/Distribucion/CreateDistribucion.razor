@@ -1,0 +1,137 @@
+﻿@page "/distribucion/create"
+@using BoleteriaOnline.Web.ViewModels.Requests
+@using BoleteriaOnline.Web.Extensions
+@inject IDistribucionService DistribucionService
+@inject DialogService dialogService
+
+<RadzenLabel Text="Crear distribucion"/>
+
+        <RadzenCard>
+            <h4 class="mb-4">Nota</h4>
+            <RadzenTextBox Change=@(args => OnChange(args, "TextBox")) Class="w-100" @bind-value="@distribucion.Nota" />
+        </RadzenCard>
+
+        <RadzenButton Text="Agregar fila" Click=@(args => AgregarFilas()) />
+        
+@if (distribucion != null)
+{
+    <h2>PLANTA BAJA</h2>
+    @if (distribucion.Filas != null)
+    {
+        @foreach (var fila in distribucion.Filas.Where(f => f.Planta == Planta.BAJA))
+        {
+            <div class="row">
+                @foreach (var celda in fila.Cells)
+                {
+                    <div class="col-1 p-1">
+                        <RadzenButton Text="@GetButtonText(celda.Value)" Click=@(args => OnClick(celda)) ButtonStyle="@GetButtonStyle(celda.Value)"/>
+                    </div>
+                }
+            </div>
+        }
+        <RadzenButton Text="Guardar cambios" Click=@(args => Crear())/>
+
+        <h2>PLANTA ALTA</h2>
+        foreach (var fila in distribucion.Filas.Where(f => f.Planta == Planta.ALTA))
+        {
+            <p>@fila.Planta</p>
+        }
+    }
+}
+        
+<RadzenButton Text="Dialog" Click=@(args => ShowCloseableFromOverlayDialog())/>
+
+@code {
+    DistribucionRequest distribucion = new DistribucionRequest() { Filas = new List<FilaRequest>() };
+
+
+
+    ButtonStyle GetButtonStyle(DistribucionEspacio espacio)
+    {
+        return espacio switch
+        {
+            DistribucionEspacio.ESPACIO_BUTACA => ButtonStyle.Success,
+            DistribucionEspacio.ESPACIO_NULL => ButtonStyle.Info,
+            DistribucionEspacio.ESPACIO_PASILLO => ButtonStyle.Light,
+            DistribucionEspacio.ESPACIO_TV => ButtonStyle.Danger,
+            _ => ButtonStyle.Warning
+        };
+    }
+
+    string GetButtonText(DistribucionEspacio espacio)
+    {
+        return espacio switch
+        {
+            DistribucionEspacio.ESPACIO_BUTACA => "B",
+            DistribucionEspacio.ESPACIO_NULL => "N",
+            DistribucionEspacio.ESPACIO_PASILLO => "P",
+            DistribucionEspacio.ESPACIO_TV => "T",
+            _ => "D"
+        };
+    }
+
+
+    async Task ShowCloseableFromOverlayDialog()
+    {
+        await dialogService.OpenAsync("Closeable from overlay Dialog", ds =>
+        @<div>
+            Click outside to close this Dialog
+        </div>, new DialogOptions() { CloseDialogOnOverlayClick = true });
+    }
+
+    void Crear()
+    {
+        //var response = DistribucionService.CreateDistribucionAsync(distribucion);
+
+
+    }
+    string value;
+
+
+    void AgregarFilas()
+    {
+        int rows = 1;
+        int columns = 5;
+        Planta planta = Planta.BAJA;
+
+        for (int i = 0; i < rows; i++)
+        {
+            FilaRequest fila = new FilaRequest() { Planta = planta };
+            fila.Cells = new List<CeldaRequest>();
+
+            for (int j = 0; j < columns; j++)
+            {
+                CeldaRequest celda = new CeldaRequest()
+                {
+                    Value = 0,
+                };
+                fila.Cells.Add(celda);
+            }
+            distribucion.Filas.Add(fila);
+        }
+
+    }
+
+
+    void OnChange(string value, string name)
+    {
+        Console.WriteLine($"{name} value changed to {value}");
+    }
+
+    void OnClick(CeldaRequest celda)
+    {
+        var values = Enum.GetValues<DistribucionEspacio>();
+
+        celda.Value = values[new Random().Next(values.Length)];
+
+
+        if (distribucion != null)
+        {
+
+
+        }
+
+        //Console.WriteLine($"{buttonName} clicked");
+    }
+
+}

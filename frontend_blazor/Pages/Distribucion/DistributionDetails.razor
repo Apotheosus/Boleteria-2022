@@ -1,0 +1,117 @@
+﻿@page "/distribucion/{id:int}"
+@using BoleteriaOnline.Web.ViewModels.Requests
+
+
+@inject IDistribucionService DistribucionService
+
+<RadzenLabel Text="Detalles de distribución"/>
+
+@if (distribucion != null)
+{
+    <h2>PLANTA BAJA</h2>
+    @foreach (var fila in distribucion.Filas.Where(f => f.Planta == Planta.BAJA))
+    {
+        <div class="row">
+            @foreach (var celda in fila.Cells)
+            {
+                <div class="col-1 p-1">
+                    <RadzenButton Text="@GetButtonText(celda.Value)" Click=@(args => OnClick(celda)) ButtonStyle="@GetButtonStyle(celda.Value)"/>
+                </div>
+            }
+        </div>
+    }
+    <RadzenButton Text="Guardar cambios" Click=@(args => GuardarCambios())/>
+
+    <h2>PLANTA ALTA</h2>
+    foreach (var fila in distribucion.Filas.Where(f => f.Planta == Planta.ALTA))
+    {
+        <p>@fila.Id</p>
+        <p>@fila.Planta</p>
+    }
+}
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    DistribucionResponse distribucion;
+
+    ButtonStyle GetButtonStyle(DistribucionEspacio espacio)
+    {
+        return espacio switch
+        {
+            DistribucionEspacio.ESPACIO_BUTACA => ButtonStyle.Success,
+            DistribucionEspacio.ESPACIO_NULL => ButtonStyle.Info,
+            DistribucionEspacio.ESPACIO_PASILLO => ButtonStyle.Light,
+            DistribucionEspacio.ESPACIO_TV => ButtonStyle.Danger,
+            _ => ButtonStyle.Warning
+        };
+    }
+
+    string GetButtonText(DistribucionEspacio espacio)
+    {
+        return espacio switch
+        {
+            DistribucionEspacio.ESPACIO_BUTACA => "B",
+            DistribucionEspacio.ESPACIO_NULL => "N",
+            DistribucionEspacio.ESPACIO_PASILLO => "P",
+            DistribucionEspacio.ESPACIO_TV => "T",
+            _ => "D"
+        };
+    }
+
+    async Task GuardarCambios()
+    {
+        List<FilaUpdateRequest> filaUpdateRequests = new();
+        DistribucionUpdateRequest request = new() { Nota = distribucion.Nota, UnPiso = distribucion.UnPiso, Filas = filaUpdateRequests };
+        foreach(var fila in distribucion.Filas)
+        {
+            List<CeldaUpdateRequest> celdas = new List<CeldaUpdateRequest>();
+            foreach(var celda in fila.Cells)
+            {
+                celdas.Add(new CeldaUpdateRequest() { Id = celda.Id, Value = celda.Value });
+            }
+
+            filaUpdateRequests.Add(new FilaUpdateRequest() { Id = fila.Id, Planta = fila.Planta, Cells = celdas });
+        }
+        await DistribucionService.UpdateDistribucionAsync(request, distribucion.Id);
+
+        await ReloadDistribution();
+    }
+
+    void OnClick(CeldaResponse celda)
+    {
+        var values = Enum.GetValues<DistribucionEspacio>();
+
+        celda.Value = values[new Random().Next(values.Length)];
+
+
+        if (distribucion != null)
+        {
+
+
+        }
+
+        //Console.WriteLine($"{buttonName} clicked");
+    }
+
+    async Task ReloadDistribution()
+    {
+        var response = await DistribucionService.GetDistribucionAsync(Id);
+
+        if (response.Success)
+        {
+            distribucion = response.Result;
+        }
+        else
+            Console.WriteLine(response.Message);        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadDistribution();
+    }
+
+}

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -11,6 +11,11 @@
 		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.ComponentModel.DataAnnotations" />
+	</ItemGroup>	
+	
 	<ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -31,7 +36,12 @@
     <PackageReference Include="XLocalizer" Version="1.0.3" />
     <PackageReference Include="XLocalizer.TagHelpers" Version="1.1.0" />
     <PackageReference Include="XLocalizer.Translate" Version="1.0.0" />
-  </ItemGroup>
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="6.13.7" />
+  </ItemGroup>	
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\BoleteriaOnline.Core\BoleteriaOnline.Core.csproj" />
+	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="swagger tofile --output swagger.json $(OutputPath)\$(AssemblyName).dll v1 " />

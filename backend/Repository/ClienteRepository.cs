@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BoleteriaOnline.Web.Data;
-using BoleteriaOnline.Web.Repository.Interface;
 using BoleteriaOnline.Web.Data.Models;
-using BoleteriaOnline.Web.Data.Models.Enums;
+using BoleteriaOnline.Core.Repositories;
+using BoleteriaOnline.Core.Data.Enums;
 
 namespace BoleteriaOnline.Web.Repository;
 
@@ -41,7 +41,7 @@ public class ClienteRepository : IClienteRepository
         return await Save();
     }
 
-    public async Task<bool> ExistsClienteAsync(long id) => await GetClienteAsync(id) != null;
+    public async Task<bool> ExistsClienteAsync(long id) => await _context.Clientes.AnyAsync(e => e.Estado == Estado.NORMAL && e.Id == id);
 
     public async Task<Cliente> GetClienteAsync(long id) => await _context.Clientes.FirstOrDefaultAsync(m => m.Estado == Estado.NORMAL && m.Id == id);
 

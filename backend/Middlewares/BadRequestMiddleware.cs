@@ -16,7 +16,7 @@ public static class BadRequestMiddleware
 
                 return new OkObjectResult(new WebResult<object>
                 {
-                    Data = null,
+                    Result = null,
                     ErrorCode = ErrorMessage.GenericValidation,
                     ErrorMessages = actionContext.ModelState
                     .Where(x => x.Value.Errors.Count > 0)

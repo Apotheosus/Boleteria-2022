@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using BoleteriaOnline.Core.Data.Enums;
+using BoleteriaOnline.Core.Repositories;
 using BoleteriaOnline.Web.Data.Models;
-using BoleteriaOnline.Web.Data.Models.Enums;
 using BoleteriaOnline.Web.Extensions.Response;
-using BoleteriaOnline.Web.Repository.Interface;
 using BoleteriaOnline.Web.Services.Interface;
 using BoleteriaOnline.Web.Utils;
 using BoleteriaOnline.Web.ViewModels.Requests;
@@ -123,6 +123,10 @@ public class ClienteService : IClienteService
                 return Error<Cliente, ClienteResponse>(ErrorMessage.CouldNotUpdate);
 
             return Ok<Cliente, ClienteResponse>(_mapper.Map<ClienteResponse>(cliente), SuccessMessage.Modified);
+        }
+        catch (UniqueConstraintException)
+        {
+            return Error<Cliente, ClienteResponse>(ErrorMessage.AlreadyExists);
         }
         catch (Exception ex)
         {

@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using BoleteriaOnline.Core.Repositories;
+using BoleteriaOnline.Core.Services;
 using BoleteriaOnline.Web.Data;
 using BoleteriaOnline.Web.Filters;
 using BoleteriaOnline.Web.Localization;
@@ -45,11 +47,17 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IDestinoRepository, DestinoRepository>();
+builder.Services.AddScoped<IViajeRepository, ViajeRepository>();
+builder.Services.AddScoped<INodoRepository, NodoRepository>();
+builder.Services.AddScoped<IDistribucionRepository, DistribucionRepository>();
 
 /* INYECCION DE SERVICIOS */
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IDestinoService, DestinoService>();
+builder.Services.AddScoped<IViajeService, ViajeService>();
+builder.Services.AddScoped<INodoService, NodoService>();
+builder.Services.AddScoped<IDistribucionService, DistribucionService>();
 
 builder.Services.AddCors();
 
@@ -158,6 +166,12 @@ app.UseRequestLocalization(localizationOptions);
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+});
+
+app.UseOpenApi();
+app.UseSwaggerUi3(options =>
+{
+    options.DocumentTitle = "Sistema de Exámenes Gex";
 });
 
 app.Run();

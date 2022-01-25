@@ -1,0 +1,39 @@
+﻿@page "/"
+@using BoleteriaOnline.Web.ViewModels.Responses
+@using BoleteriaOnline.Core.Services
+@inject IDistribucionService DistribucionService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<RadzenButton Text="@text"></RadzenButton>
+
+<RadzenDataGrid Data="@orderDetails" TItem="DistribucionResponse" AllowVirtualization="true" Style="height:400px"
+                AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or"
+                AllowSorting="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="DistribucionResponse" Property="Id" Title="Id" />
+        <RadzenDataGridColumn TItem="DistribucionResponse" Property="Nota" Title="Nota" />
+        <RadzenDataGridColumn TItem="DistribucionResponse" Property="UnPiso" Title="Un piso"/>
+    </Columns>
+</RadzenDataGrid>
+
+
+
+@code {
+
+    IEnumerable<DistribucionResponse> orderDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await DistribucionService.GetDistribucionesAsync();
+        if (response.Success)
+            orderDetails = response.Result;
+        else Console.WriteLine(response.Message);
+    }
+
+    string text = "Hi";
+}

@@ -10,7 +10,5 @@ public class Destino : Auditory
 {
     public int Id { get; set; }
     [StringLength(100)]
-    public string? Nombre { get; set; }
-    public double Latitud { get; set; }
-    public double Longitud { get; set; }
+    public string Nombre { get; set; }
 }

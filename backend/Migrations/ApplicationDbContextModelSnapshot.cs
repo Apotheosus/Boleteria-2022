@@ -30,12 +30,11 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("asiento");
 
-                    b.Property<int>("DestinoId")
+                    b.Property<int?>("DestinoId")
                         .HasColumnType("int")
                         .HasColumnName("destino_id");
 
                     b.Property<string>("Estado")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("estado");
 
@@ -59,7 +58,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("hora_salida_adicional");
 
-                    b.Property<int>("OrigenId")
+                    b.Property<int?>("OrigenId")
                         .HasColumnType("int")
                         .HasColumnName("origen_id");
 
@@ -67,7 +66,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("pago_id");
 
-                    b.Property<long>("PasajeroId")
+                    b.Property<long?>("PasajeroId")
                         .HasColumnType("bigint")
                         .HasColumnName("pasajero_id");
 
@@ -75,7 +74,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("precio");
 
-                    b.Property<int>("RecorridoId")
+                    b.Property<int?>("RecorridoId")
                         .HasColumnType("int")
                         .HasColumnName("recorrido_id");
 
@@ -160,49 +159,6 @@ namespace BoleteriaOnline.Web.Migrations
                     b.ToTable("pagos", (string)null);
                 });
 
-            modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Arco", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Demora")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("demora");
-
-                    b.Property<int>("DestinoId")
-                        .HasColumnType("int")
-                        .HasColumnName("destino_id");
-
-                    b.Property<int>("OrigenId")
-                        .HasColumnType("int")
-                        .HasColumnName("origen_id");
-
-                    b.Property<double>("Precio")
-                        .HasColumnType("double")
-                        .HasColumnName("precio");
-
-                    b.Property<int?>("ViajeId")
-                        .HasColumnType("int")
-                        .HasColumnName("viaje_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_arista");
-
-                    b.HasIndex("DestinoId")
-                        .HasDatabaseName("ix_arista_destino_id");
-
-                    b.HasIndex("OrigenId")
-                        .HasDatabaseName("ix_arista_origen_id");
-
-                    b.HasIndex("ViajeId")
-                        .HasDatabaseName("ix_arista_viaje_id");
-
-                    b.ToTable("Arista");
-                });
-
             modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Celda", b =>
                 {
                     b.Property<int>("Id")
@@ -210,13 +166,17 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("FechaRegistro")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("fecha_registro");
+                        .HasColumnName("created_at");
 
                     b.Property<int?>("FilaId")
                         .HasColumnType("int")
                         .HasColumnName("fila_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.Property<int>("Value")
                         .HasColumnType("int")
@@ -255,10 +215,12 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("genero");
 
                     b.Property<string>("Nacionalidad")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("nacionalidad");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("nombre");
 
@@ -287,14 +249,6 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("estado");
 
-                    b.Property<double>("Latitud")
-                        .HasColumnType("double")
-                        .HasColumnName("latitud");
-
-                    b.Property<double>("Longitud")
-                        .HasColumnType("double")
-                        .HasColumnName("longitud");
-
                     b.Property<string>("Nombre")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
@@ -321,8 +275,11 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("Nota")
-                        .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)")
                         .HasColumnName("nota");
@@ -331,8 +288,16 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("un_piso");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
                     b.HasKey("Id")
                         .HasName("pk_distribuciones");
+
+                    b.HasIndex("Nota")
+                        .IsUnique()
+                        .HasDatabaseName("ix_distribuciones_nota");
 
                     b.ToTable("distribuciones", (string)null);
                 });
@@ -377,7 +342,8 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("frecuencia_id");
 
                     b.Property<string>("Hora")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)")
                         .HasColumnName("hora");
 
                     b.Property<int?>("ViajeId")
@@ -397,6 +363,57 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasDatabaseName("ix_horarios_viaje_id");
 
                     b.ToTable("horarios", (string)null);
+                });
+
+            modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Nodo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Demora")
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)")
+                        .HasColumnName("demora");
+
+                    b.Property<int?>("DestinoId")
+                        .HasColumnType("int")
+                        .HasColumnName("destino_id");
+
+                    b.Property<int?>("OrigenId")
+                        .HasColumnType("int")
+                        .HasColumnName("origen_id");
+
+                    b.Property<float>("Precio")
+                        .HasColumnType("float")
+                        .HasColumnName("precio");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int?>("ViajeId")
+                        .HasColumnType("int")
+                        .HasColumnName("viaje_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_nodos");
+
+                    b.HasIndex("DestinoId")
+                        .HasDatabaseName("ix_nodos_destino_id");
+
+                    b.HasIndex("OrigenId")
+                        .HasDatabaseName("ix_nodos_origen_id");
+
+                    b.HasIndex("ViajeId")
+                        .HasDatabaseName("ix_nodos_viaje_id");
+
+                    b.ToTable("nodos", (string)null);
                 });
 
             modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Usuario", b =>
@@ -451,7 +468,8 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("normalized_user_name");
 
                     b.Property<string>("Password")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
                         .HasColumnName("password");
 
                     b.Property<string>("PasswordHash")
@@ -487,7 +505,8 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("user_name");
 
                     b.Property<string>("Username")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)")
                         .HasColumnName("username");
 
                     b.HasKey("Id")
@@ -503,9 +522,18 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("Nombre")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("nombre");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id")
                         .HasName("pk_viajes");
@@ -758,15 +786,11 @@ namespace BoleteriaOnline.Web.Migrations
                     b.HasOne("BoleteriaOnline.Web.Data.Models.Destino", "Destino")
                         .WithMany()
                         .HasForeignKey("DestinoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_boletos_destinos_destino_id");
 
                     b.HasOne("BoleteriaOnline.Web.Data.Models.Destino", "Origen")
                         .WithMany()
                         .HasForeignKey("OrigenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_boletos_destinos_origen_id");
 
                     b.HasOne("BoleteriaOnline.Core.Models.Pago", "Pago")
@@ -777,15 +801,11 @@ namespace BoleteriaOnline.Web.Migrations
                     b.HasOne("BoleteriaOnline.Web.Data.Models.Cliente", "Pasajero")
                         .WithMany()
                         .HasForeignKey("PasajeroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_boletos_clientes_pasajero_id");
 
                     b.HasOne("BoleteriaOnline.Web.Data.Models.Viaje", "Recorrido")
                         .WithMany()
                         .HasForeignKey("RecorridoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_boletos_viajes_recorrido_id");
 
                     b.HasOne("BoleteriaOnline.Web.Data.Models.Usuario", "Vendedor")
@@ -804,32 +824,6 @@ namespace BoleteriaOnline.Web.Migrations
                     b.Navigation("Recorrido");
 
                     b.Navigation("Vendedor");
-                });
-
-            modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Arco", b =>
-                {
-                    b.HasOne("BoleteriaOnline.Web.Data.Models.Destino", "Destino")
-                        .WithMany()
-                        .HasForeignKey("DestinoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_arista_destinos_destino_id");
-
-                    b.HasOne("BoleteriaOnline.Web.Data.Models.Destino", "Origen")
-                        .WithMany()
-                        .HasForeignKey("OrigenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_arista_destinos_origen_id");
-
-                    b.HasOne("BoleteriaOnline.Web.Data.Models.Viaje", null)
-                        .WithMany("Arcos")
-                        .HasForeignKey("ViajeId")
-                        .HasConstraintName("fk_arista_viajes_viaje_id");
-
-                    b.Navigation("Destino");
-
-                    b.Navigation("Origen");
                 });
 
             modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Celda", b =>
@@ -868,6 +862,28 @@ namespace BoleteriaOnline.Web.Migrations
                     b.Navigation("Distribucion");
 
                     b.Navigation("Frecuencia");
+                });
+
+            modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Nodo", b =>
+                {
+                    b.HasOne("BoleteriaOnline.Web.Data.Models.Destino", "Destino")
+                        .WithMany()
+                        .HasForeignKey("DestinoId")
+                        .HasConstraintName("fk_nodos_destinos_destino_id");
+
+                    b.HasOne("BoleteriaOnline.Web.Data.Models.Destino", "Origen")
+                        .WithMany()
+                        .HasForeignKey("OrigenId")
+                        .HasConstraintName("fk_nodos_destinos_origen_id");
+
+                    b.HasOne("BoleteriaOnline.Web.Data.Models.Viaje", null)
+                        .WithMany("Nodos")
+                        .HasForeignKey("ViajeId")
+                        .HasConstraintName("fk_nodos_viajes_viaje_id");
+
+                    b.Navigation("Destino");
+
+                    b.Navigation("Origen");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -939,9 +955,9 @@ namespace BoleteriaOnline.Web.Migrations
 
             modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Viaje", b =>
                 {
-                    b.Navigation("Arcos");
-
                     b.Navigation("Horarios");
+
+                    b.Navigation("Nodos");
                 });
 #pragma warning restore 612, 618
         }
