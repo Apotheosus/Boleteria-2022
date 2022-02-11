@@ -938,8 +938,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
@@ -1889,17 +1888,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ViajeRequest"
+                "$ref": "#/components/schemas/ViajeUpdateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ViajeRequest"
+                "$ref": "#/components/schemas/ViajeUpdateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ViajeRequest"
+                "$ref": "#/components/schemas/ViajeUpdateRequest"
               }
             }
           }
@@ -2213,6 +2212,19 @@
         },
         "additionalProperties": false
       },
+      "DayOfWeek": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "DestinoRequest": {
         "required": [
           "nombre"
@@ -2451,6 +2463,10 @@
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
           "filas": {
             "type": "array",
             "items": {
@@ -2480,7 +2496,8 @@
           8,
           9,
           10,
-          11
+          11,
+          12
         ],
         "type": "integer",
         "format": "int32"
@@ -2557,6 +2574,56 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "HorarioRequest": {
+        "required": [
+          "dias",
+          "distribucion_id",
+          "hora"
+        ],
+        "type": "object",
+        "properties": {
+          "hora": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayOfWeek"
+            }
+          },
+          "distribucion_id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HorarioResponse": {
+        "required": [
+          "dias",
+          "distribucion_id",
+          "hora"
+        ],
+        "type": "object",
+        "properties": {
+          "hora": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayOfWeek"
+            }
+          },
+          "distribucion_id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "LoginRequest": {
         "required": [
@@ -2901,22 +2968,18 @@
       },
       "ViajeRequest": {
         "required": [
-          "nodos",
+          "horarios",
           "nombre"
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
           "nombre": {
             "type": "string"
           },
-          "nodos": {
+          "horarios": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/NodoRequest"
+              "$ref": "#/components/schemas/HorarioRequest"
             }
           }
         },
@@ -2924,7 +2987,7 @@
       },
       "ViajeResponse": {
         "required": [
-          "nodos",
+          "horarios",
           "nombre"
         ],
         "type": "object",
@@ -2936,10 +2999,10 @@
           "nombre": {
             "type": "string"
           },
-          "nodos": {
+          "horarios": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/NodoRequest"
+              "$ref": "#/components/schemas/HorarioResponse"
             }
           }
         },
@@ -3011,6 +3074,30 @@
           "error": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ViajeUpdateRequest": {
+        "required": [
+          "horarios",
+          "id",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "horarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HorarioRequest"
+            }
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

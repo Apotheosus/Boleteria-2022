@@ -1,10 +1,10 @@
 ﻿using BoleteriaOnline.Web.Data.Models;
 
-namespace BoleteriaOnline.Web.Repository.Interface;
+namespace BoleteriaOnline.Web.Repositories;
 public interface INodoRepository
 {
     Task<ICollection<Nodo>> GetNodosAsync();
-    Task<Nodo?> GetNodoAsync(long id);
+    Task<Nodo> GetNodoAsync(long id);
     Task<bool> ExistsNodoAsync(long id);
     Task<bool> CreateNodoAsync(Nodo nodo);
     Task<bool> DeleteNodoAsync(Nodo nodo);

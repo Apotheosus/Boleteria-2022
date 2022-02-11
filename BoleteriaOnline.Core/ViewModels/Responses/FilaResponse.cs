@@ -1,6 +1,6 @@
 ﻿using BoleteriaOnline.Core.Data.Enums;
 
-namespace BoleteriaOnline.Web.ViewModels.Responses;
+namespace BoleteriaOnline.Core.ViewModels.Responses;
 public class FilaResponse
 {
     public int Id { get; set; }

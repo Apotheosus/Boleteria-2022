@@ -1,8 +1,7 @@
-﻿using BoleteriaOnline.Web.ViewModels.Requests;
+﻿using BoleteriaOnline.Core.ViewModels.Requests;
 
-namespace BoleteriaOnline.Web.ViewModels.Responses;
+namespace BoleteriaOnline.Core.ViewModels.Responses;
 public class DestinoResponse : DestinoRequest
 {
     public int Id { get; set; }
-
 }

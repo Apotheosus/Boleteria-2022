@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace BoleteriaOnline.Web.Extensions;
+namespace BoleteriaOnline.Core.Extensions;
 public static class EnumExtensions
 {
     public static string GetDescription(this Enum value)

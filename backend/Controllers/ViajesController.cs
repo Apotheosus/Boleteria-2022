@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using BoleteriaOnline.Web.Utils;
 using BoleteriaOnline.Web.Extensions.Response;
-using BoleteriaOnline.Web.Services.Interface;
-using BoleteriaOnline.Web.ViewModels.Responses;
-using BoleteriaOnline.Web.ViewModels.Requests;
+using BoleteriaOnline.Core.Services;
+using BoleteriaOnline.Core.ViewModels.Requests;
+using BoleteriaOnline.Core.Utils;
+using BoleteriaOnline.Core.ViewModels.Responses;
 
 namespace BoleteriaOnline.Web.Controllers;
 
@@ -51,9 +51,9 @@ public class ViajesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<WebResult<ViajeResponse>>> CreateViaje([FromBody] ViajeRequest viajeDto)
+    public async Task<ActionResult<WebResult<ViajeResponse>>> CreateViaje([FromBody] ViajeRequest request)
     {
-        var viaje = await _viajeservice.CreateViajeAsync(viajeDto);
+        var viaje = await _viajeservice.CreateViajeAsync(request);
 
         if (!viaje.Success)
             return StatusCode(ResponseHelper.GetHttpError(viaje.ErrorCode), viaje);
@@ -62,9 +62,9 @@ public class ViajesController : ControllerBase
 
     [HttpPatch]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WebResult<ViajeResponse>))]
-    public async Task<ActionResult<WebResult<ViajeResponse>>> UpdateViaje([FromBody] ViajeRequest viajeDto)
+    public async Task<ActionResult<WebResult<ViajeResponse>>> UpdateViaje([FromBody] ViajeUpdateRequest request)
     {
-        var viaje = await _viajeservice.UpdateViajeAsync(viajeDto);
+        var viaje = await _viajeservice.UpdateViajeAsync(request);
 
         if (!viaje.Success)
             return StatusCode(ResponseHelper.GetHttpError(viaje.ErrorCode), viaje);

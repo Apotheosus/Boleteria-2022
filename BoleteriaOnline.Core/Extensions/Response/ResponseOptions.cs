@@ -1,6 +1,6 @@
 ﻿using Humanizer;
 
-namespace BoleteriaOnline.Web.Extensions.Response;
+namespace BoleteriaOnline.Core.Extensions.Response;
 public class ResponseOptions
 {
     public string Entity { get; set; }

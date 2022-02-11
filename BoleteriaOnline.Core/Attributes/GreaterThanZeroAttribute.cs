@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BoleteriaOnline.Web.Attributes;
+namespace BoleteriaOnline.Core.Attributes;
 public class GreaterThanZeroAttribute : ValidationAttribute
 {
     public override bool IsValid(object value)

@@ -1,6 +1,6 @@
 ﻿using BoleteriaOnline.Web.Data.Models;
 
-namespace BoleteriaOnline.Web.Repository.Interface;
+namespace BoleteriaOnline.Web.Repositories;
 public interface IDestinoRepository
 {
     Task<ICollection<Destino>> GetDestinosAsync();

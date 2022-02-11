@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using BoleteriaOnline.Core.Extensions.Response;
+using BoleteriaOnline.Core.Services;
+using BoleteriaOnline.Core.Utils;
+using BoleteriaOnline.Core.ViewModels.Requests;
+using BoleteriaOnline.Core.ViewModels.Responses;
 using BoleteriaOnline.Web.Data.Models;
-using BoleteriaOnline.Web.Extensions.Response;
-using BoleteriaOnline.Web.Repository.Interface;
-using BoleteriaOnline.Web.Services.Interface;
-using BoleteriaOnline.Web.Utils;
-using BoleteriaOnline.Web.ViewModels.Requests;
-using BoleteriaOnline.Web.ViewModels.Responses;
+using BoleteriaOnline.Web.Repositories;
 using EntityFramework.Exceptions.Common;
 
 namespace BoleteriaOnline.Web.Services;
@@ -14,21 +14,42 @@ public class ViajeService : IViajeService
 {
     private readonly IMapper _mapper;
     private readonly IViajeRepository _viajeRepository;
+    private readonly IDistribucionRepository _distribucionRepository
+        ;
 
-    public ViajeService(IMapper mapper, IViajeRepository viajeRepository)
+    public ViajeService(IMapper mapper, IViajeRepository viajeRepository, IDistribucionRepository distribucionRepository)
     {
         _mapper = mapper;
         _viajeRepository = viajeRepository;
+        _distribucionRepository = distribucionRepository;
     }
 
     public async Task<WebResult<ViajeResponse>> CreateViajeAsync(ViajeRequest viajeDto)
     {
         try
         {
-            if (await _viajeRepository.ExistsViajeAsync(viajeDto.Id))
-                return Error<Viaje, ViajeResponse>(ErrorMessage.AlreadyExists);
+            if (viajeDto.Horarios.Count == 0)
+                return Error<Horario, ViajeResponse>(ErrorMessage.EmptyList);
 
-            var viaje = _mapper.Map<Viaje>(viajeDto);
+            foreach (var horario in viajeDto.Horarios)
+            {
+                if (!await _distribucionRepository.ExistsDistribucionAsync(horario.DistribucionId))
+                    return Error<Distribucion, ViajeResponse>(ErrorMessage.NotFound);
+            }
+
+            Viaje viaje = _mapper.Map<Viaje>(viajeDto);
+
+            foreach (var horario in viaje.Horarios)
+            {
+                horario.Lunes = viajeDto.Horarios[viaje.Horarios.IndexOf(horario)].Dias.Contains(DayOfWeek.Monday);
+                horario.Martes = viajeDto.Horarios[viaje.Horarios.IndexOf(horario)].Dias.Contains(DayOfWeek.Tuesday);
+                horario.Miercoles = viajeDto.Horarios[viaje.Horarios.IndexOf(horario)].Dias.Contains(DayOfWeek.Wednesday);
+                horario.Jueves = viajeDto.Horarios[viaje.Horarios.IndexOf(horario)].Dias.Contains(DayOfWeek.Thursday);
+                horario.Viernes = viajeDto.Horarios[viaje.Horarios.IndexOf(horario)].Dias.Contains(DayOfWeek.Friday);
+                horario.Sabado = viajeDto.Horarios[viaje.Horarios.IndexOf(horario)].Dias.Contains(DayOfWeek.Saturday);
+                horario.Domingo = viajeDto.Horarios[viaje.Horarios.IndexOf(horario)].Dias.Contains(DayOfWeek.Sunday);
+            }
+
             if (!await _viajeRepository.CreateViajeAsync(viaje))
                 return Error<Viaje, ViajeResponse>(ErrorMessage.CouldNotCreate);
 
@@ -98,7 +119,7 @@ public class ViajeService : IViajeService
         }
     }
 
-    public async Task<WebResult<ViajeResponse>> UpdateViajeAsync(ViajeRequest viajeDto)
+    public async Task<WebResult<ViajeResponse>> UpdateViajeAsync(ViajeUpdateRequest viajeDto)
     {
         try
         {

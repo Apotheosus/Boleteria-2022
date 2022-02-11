@@ -1,11 +1,11 @@
 ﻿using System.Runtime.InteropServices;
-using BoleteriaOnline.Web.Attributes;
-using BoleteriaOnline.Web.Extensions;
-using BoleteriaOnline.Web.Extensions.Response;
+using BoleteriaOnline.Core.Attributes;
+using BoleteriaOnline.Core.Extensions;
+using BoleteriaOnline.Core.Extensions.Response;
 using Humanizer;
 using SmartFormat;
 
-namespace BoleteriaOnline.Web.Utils;
+namespace BoleteriaOnline.Core.Utils;
 public static class WebResponse
 {
     private static string ResolveErrorCode(ErrorMessage error) => new string(Enum.GetName(typeof(ErrorMessage), error).ToSnakeCase().ToArray()).ToUpper();
@@ -32,7 +32,7 @@ public static class WebResponse
             Error = ResolveErrorCode(error),
             Success = false,
             Message = "Se encontraron uno o más errores.",
-            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(EnumExtensions.GetDescription(error), Options<TEntity>()) } } }
+            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(error.GetDescription(), Options<TEntity>()) } } }
         };
     }
 
@@ -45,7 +45,7 @@ public static class WebResponse
             Error = ResolveErrorCode(error),
             Success = false,
             Message = "Se encontraron uno o más errores.",
-            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(EnumExtensions.GetDescription(error), Options<TEntity>()) } } }
+            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(error.GetDescription(), Options<TEntity>()) } } }
         };
     }
 
@@ -56,7 +56,7 @@ public static class WebResponse
             Result = default,
             Success = true,
             Message = "Correcto.",
-            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(EnumExtensions.GetDescription(message), Options<TEntity>()) } } }
+            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(message.GetDescription(), Options<TEntity>()) } } }
         };
     }
 
@@ -67,7 +67,7 @@ public static class WebResponse
             Result = result,
             Success = true,
             Message = "Correcto.",
-            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(EnumExtensions.GetDescription(message), Options<TEntity>()) } } }
+            ErrorMessages = new Dictionary<string, string[]>() { { new string(key.ToSnakeCase().ToArray()), new string[] { Smart.Format(message.GetDescription(), Options<TEntity>()) } } }
         };
     }
 
@@ -88,7 +88,7 @@ public static class WebResponse
             Error = ResolveErrorCode(error),
             Result = default,
             Success = false,
-            Message = Smart.Format(EnumExtensions.GetDescription(error), Options<TEntity>()),
+            Message = Smart.Format(error.GetDescription(), Options<TEntity>()),
             ErrorMessages = string.IsNullOrEmpty(message) ? new Dictionary<string, string[]>() : new Dictionary<string, string[]>() { { "error", new string[] { message } } }
         };
     }

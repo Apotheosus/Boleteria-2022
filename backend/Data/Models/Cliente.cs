@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BoleteriaOnline.Core.Attributes;
 using BoleteriaOnline.Core.Data.Enums;
-using BoleteriaOnline.Web.Attributes;
 using Humanizer;
 
 namespace BoleteriaOnline.Web.Data.Models;

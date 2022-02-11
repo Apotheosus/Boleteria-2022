@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace BoleteriaOnline.Web.Extensions.Response;
+namespace BoleteriaOnline.Core.Extensions.Response;
 public enum ErrorMessage
 {
     [Description("Se produjo un error interno.")]
@@ -25,6 +25,8 @@ public enum ErrorMessage
     CouldNotDelete,
     [Description("No se pudo modificar {Gender:ese|esa} {Entity}.")]
     CouldNotUpdate,
+    [Description("No se puede crear {Gender:un|una} {Entity} {Gender:vacío|vacía}.")]
+    EmptyList,
     [Description("Ocurrieron uno o más errores durante la validación.")]
     GenericValidation,
 }

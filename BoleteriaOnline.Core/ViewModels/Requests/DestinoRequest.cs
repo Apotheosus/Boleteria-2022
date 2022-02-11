@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BoleteriaOnline.Web.ViewModels.Requests;
+namespace BoleteriaOnline.Core.ViewModels.Requests;
 public class DestinoRequest
 {
     [Required, Display(Name = "nombre"), StringLength(100)]

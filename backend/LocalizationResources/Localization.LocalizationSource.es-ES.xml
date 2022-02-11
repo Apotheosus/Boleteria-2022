@@ -152,4 +152,19 @@
     <value>id</value>
     <comment>Created by XLocalizer</comment>
   </data>
+  <data isActive="false">
+    <key>horario</key>
+    <value>horario</value>
+    <comment>Created by XLocalizer</comment>
+  </data>
+  <data isActive="false">
+    <key>hora</key>
+    <value>hora</value>
+    <comment>Created by XLocalizer</comment>
+  </data>
+  <data isActive="false">
+    <key>días de la semana</key>
+    <value>días de la semana</value>
+    <comment>Created by XLocalizer</comment>
+  </data>
 </root>

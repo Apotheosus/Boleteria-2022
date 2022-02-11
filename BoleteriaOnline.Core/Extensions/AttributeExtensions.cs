@@ -1,4 +1,4 @@
-﻿namespace BoleteriaOnline.Web.Extensions;
+﻿namespace BoleteriaOnline.Core.Extensions;
 public static class AttributeExtensions
 {
     public static TValue GetAttributeValue<TAttribute, TValue>(this Type type, Func<TAttribute, TValue> valueSelector) where TAttribute : Attribute

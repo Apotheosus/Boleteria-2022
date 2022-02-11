@@ -1,8 +1,8 @@
-﻿using BoleteriaOnline.Web.Utils;
-using BoleteriaOnline.Web.ViewModels.Requests;
-using BoleteriaOnline.Web.ViewModels.Responses;
+﻿using BoleteriaOnline.Core.Utils;
+using BoleteriaOnline.Core.ViewModels.Requests;
+using BoleteriaOnline.Core.ViewModels.Responses;
 
-namespace BoleteriaOnline.Web.Services.Interface;
+namespace BoleteriaOnline.Core.Services;
 public interface IDestinoService
 {
     Task<WebResult<ICollection<DestinoResponse>>> GetDestinosAsync();

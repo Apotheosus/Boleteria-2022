@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using BoleteriaOnline.Core.Data.Enums;
+using BoleteriaOnline.Core.Extensions.Response;
 using BoleteriaOnline.Core.Services;
+using BoleteriaOnline.Core.Utils;
+using BoleteriaOnline.Core.ViewModels.Requests;
+using BoleteriaOnline.Core.ViewModels.Responses;
 using BoleteriaOnline.Web.Data.Models;
 using BoleteriaOnline.Web.Extensions;
-using BoleteriaOnline.Web.Extensions.Response;
-using BoleteriaOnline.Web.Repository.Interface;
-using BoleteriaOnline.Web.Utils;
-using BoleteriaOnline.Web.ViewModels.Requests;
-using BoleteriaOnline.Web.ViewModels.Responses;
+using BoleteriaOnline.Web.Repositories;
 using EntityFramework.Exceptions.Common;
 
 namespace BoleteriaOnline.Web.Services;
@@ -29,6 +29,22 @@ public class DistribucionService : IDistribucionService
         try
         {
             var distribucion = _mapper.Map<Distribucion>(distribucionDto);
+
+            if(distribucion.Filas.Count == 0)
+                return Error<Distribucion, DistribucionResponse>(ErrorMessage.EmptyList);
+            else
+            {
+                foreach (var fila in distribucion.Filas)
+                {
+                    if(fila.Cells.Count == 0)
+                        return Error<DistribucionResponse>($"Se encontró una fila sin celdas.");
+                }
+            }
+
+            if(distribucion.UnPiso && distribucion.Filas.Where(f => f.Planta == Planta.ALTA).Count() > 0)
+            {
+                return Error<DistribucionResponse>($"Se encontró una fila sin celdas.");
+            }
 
             if (distribucion.Filas.Where(f => f.Planta == Planta.BAJA).Count() >= MAX_ITEMS_PER_PLANTA)
                 return Error<DistribucionResponse>($"La cantidad de filas para la planta baja excede el límite permitido ({MAX_ITEMS_PER_PLANTA}).");
@@ -105,14 +121,14 @@ public class DistribucionService : IDistribucionService
         }
     }
 
-    public async Task<WebResult<DistribucionResponse>> UpdateDistribucionAsync(DistribucionUpdateRequest distribucionDto, long id)
+    public async Task<WebResult<DistribucionResponse>> UpdateDistribucionAsync(DistribucionUpdateRequest distribucionDto)
     {
         try
         {
-            if (id <= 0)
+            if (distribucionDto.Id <= 0)
                 return Error<Distribucion, DistribucionResponse>(ErrorMessage.InvalidId);
 
-            var distribucion = await _distribucionRepository.GetDistribucionAsync(id);
+            var distribucion = await _distribucionRepository.GetDistribucionAsync(distribucionDto.Id);
 
             if (distribucion == null)
                 return Error<Distribucion, DistribucionResponse>(ErrorMessage.NotFound);
@@ -125,11 +141,11 @@ public class DistribucionService : IDistribucionService
 
             foreach (var fila in distribucionDto.Filas)
             {
-                if(distribucion.Filas.Any(f => f.DistribucionId == id && f.Id == fila.Id))
+                if(distribucion.Filas.Any(f => f.DistribucionId == distribucionDto.Id && f.Id == fila.Id))
                 {
                     foreach (var celda in fila.Cells)
                     {
-                        if (distribucion.Filas.Any(f => f.DistribucionId == id && f.Id == fila.Id && f.Cells.Any(c => c.Id == celda.Id)))
+                        if (distribucion.Filas.Any(f => f.DistribucionId == distribucionDto.Id && f.Id == fila.Id && f.Cells.Any(c => c.Id == celda.Id)))
                         {
                             var filaDistri = distribucion.Filas
                                 .FirstOrDefault(f => f.Id == fila.Id);

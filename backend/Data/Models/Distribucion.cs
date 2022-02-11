@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using BoleteriaOnline.Core.Attributes;
 using BoleteriaOnline.Core.Data.Enums;
 using BoleteriaOnline.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BoleteriaOnline.Web.Data.Models;
 [Index(nameof(Nota), IsUnique = true)]
+[HumanDescription("distribución", Humanizer.GrammaticalGender.Feminine)]
 public class Distribucion : AuditoryDates
 {
     public int Id { get; set; }

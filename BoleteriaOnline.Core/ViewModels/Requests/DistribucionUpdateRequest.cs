@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BoleteriaOnline.Core.Attributes;
 using BoleteriaOnline.Core.Data.Enums;
-using BoleteriaOnline.Web.Attributes;
 
-namespace BoleteriaOnline.Web.ViewModels.Requests;
+namespace BoleteriaOnline.Core.ViewModels.Requests;
 
 public class DistribucionUpdateRequest
 {
+    public long Id { get; set; }
+
     [Required, Display(Name = "Filas")]
     public List<FilaUpdateRequest> Filas { get; set; }
 

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace BoleteriaOnline.Web.Data.Models;
+[Index(nameof(Nombre), IsUnique = true)]
 public class Viaje : AuditoryDates
 {
     public int Id { get; set; }

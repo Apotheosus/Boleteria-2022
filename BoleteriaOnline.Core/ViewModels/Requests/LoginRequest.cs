@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BoleteriaOnline.Web.ViewModels.Requests;
+namespace BoleteriaOnline.Core.ViewModels.Requests;
 public class LoginRequest
 {
     [Required, Display(Name = "correo electrónico"), Description("Dirección de correo eletrónico válida. Por ejemplo: user@example.com"), EmailAddress]

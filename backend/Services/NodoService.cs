@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using BoleteriaOnline.Core.Extensions.Response;
+using BoleteriaOnline.Core.Services;
+using BoleteriaOnline.Core.Utils;
+using BoleteriaOnline.Core.ViewModels.Requests;
+using BoleteriaOnline.Core.ViewModels.Responses;
 using BoleteriaOnline.Web.Data.Models;
-using BoleteriaOnline.Web.Extensions.Response;
-using BoleteriaOnline.Web.Repository.Interface;
-using BoleteriaOnline.Web.Services.Interface;
-using BoleteriaOnline.Web.Utils;
-using BoleteriaOnline.Web.ViewModels.Requests;
-using BoleteriaOnline.Web.ViewModels.Responses;
+using BoleteriaOnline.Web.Repositories;
 using EntityFramework.Exceptions.Common;
 
 namespace BoleteriaOnline.Web.Services;
@@ -27,19 +27,16 @@ public class NodoService : INodoService
     {
         try
         {
-            if (await _nodoRepository.ExistsNodoAsync(nodoDto.Id))
-                return Error<Nodo, NodoResponse>(ErrorMessage.AlreadyExists);
-
             var nodo = _mapper.Map<Nodo>(nodoDto);
 
-            Destino? nodoDtoOrigen = await _destinoRepository.GetDestinoAsync(nodoDto.OrigenId);
+            Destino nodoDtoOrigen = await _destinoRepository.GetDestinoAsync(nodoDto.OrigenId);
 
             if (nodoDtoOrigen != null)
                 nodo.Origen = nodoDtoOrigen;
             else
                 return KeyError<Destino, NodoResponse>(nameof(nodoDto.OrigenId), ErrorMessage.NotFound);
             
-            Destino? nodoDtoDestino = await _destinoRepository.GetDestinoAsync(nodoDto.DestinoId);
+            Destino nodoDtoDestino = await _destinoRepository.GetDestinoAsync(nodoDto.DestinoId);
 
             if (nodoDtoDestino != null)
                 nodo.Destino = nodoDtoDestino;
@@ -125,14 +122,14 @@ public class NodoService : INodoService
             if (nodoDto.Id == 0)
                 return Error<Nodo, NodoResponse>(ErrorMessage.InvalidId);
 
-            Nodo? nodo = await _nodoRepository.GetNodoAsync(nodoDto.Id);
+            Nodo nodo = await _nodoRepository.GetNodoAsync(nodoDto.Id);
 
             if (nodo == null)
                 return Error<Nodo, NodoResponse>(ErrorMessage.NotFound);
 
             if(nodo.Origen?.Id != nodoDto.OrigenId)
             {
-                Destino? nodoDtoOrigen = await _destinoRepository.GetDestinoAsync(nodoDto.OrigenId);
+                Destino nodoDtoOrigen = await _destinoRepository.GetDestinoAsync(nodoDto.OrigenId);
 
                 if (await _destinoRepository.ExistsDestinoAsync(nodoDto.OrigenId))
                     nodo.Origen = nodoDtoOrigen;
@@ -142,7 +139,7 @@ public class NodoService : INodoService
 
             if (nodo.Destino?.Id != nodoDto.DestinoId)
             {
-                Destino? nodoDtoDestino = await _destinoRepository.GetDestinoAsync(nodoDto.DestinoId);
+                Destino nodoDtoDestino = await _destinoRepository.GetDestinoAsync(nodoDto.DestinoId);
 
                 if (await _destinoRepository.ExistsDestinoAsync(nodoDto.DestinoId))
                     nodo.Destino = nodoDtoDestino;

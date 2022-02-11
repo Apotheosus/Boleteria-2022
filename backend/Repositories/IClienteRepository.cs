@@ -1,6 +1,6 @@
 ﻿using BoleteriaOnline.Web.Data.Models;
 
-namespace BoleteriaOnline.Core.Repositories;
+namespace BoleteriaOnline.Web.Repositories;
 public interface IClienteRepository
 {
     Task<ICollection<Cliente>> GetClientesAsync();

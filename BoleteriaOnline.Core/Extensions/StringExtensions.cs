@@ -1,4 +1,4 @@
-﻿namespace BoleteriaOnline.Web.Extensions;
+﻿namespace BoleteriaOnline.Core.Extensions;
 public static class StringExtensions
 {
     public static IEnumerable<char> ToSnakeCase(this string text)

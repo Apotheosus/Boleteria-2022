@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BoleteriaOnline.Core.Data.Enums;
 
-namespace BoleteriaOnline.Web.ViewModels.Responses;
+namespace BoleteriaOnline.Core.ViewModels.Responses;
 public class UsuarioResponse
 {
     public int Dni { get; set; }

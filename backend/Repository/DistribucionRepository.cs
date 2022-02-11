@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BoleteriaOnline.Web.Data;
-using BoleteriaOnline.Web.Repository.Interface;
 using BoleteriaOnline.Web.Data.Models;
+using BoleteriaOnline.Web.Repositories;
 
 namespace BoleteriaOnline.Web.Repository;
 
@@ -24,7 +24,7 @@ public class DistribucionRepository : IDistribucionRepository
 
     public async Task<bool> DeleteDistribucionAsync(long id)
     {
-        Distribucion? distribucion = await GetDistribucionAsync(id);
+        Distribucion distribucion = await GetDistribucionAsync(id);
         return distribucion == null ? false : await DeleteDistribucionAsync(distribucion);
     }
 

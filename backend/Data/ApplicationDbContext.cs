@@ -1,5 +1,4 @@
-﻿using BoleteriaOnline.Core.Models;
-using BoleteriaOnline.Web.Data.Models;
+﻿using BoleteriaOnline.Web.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

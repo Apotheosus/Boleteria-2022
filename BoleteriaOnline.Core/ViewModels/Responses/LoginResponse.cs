@@ -1,5 +1,5 @@
-﻿namespace BoleteriaOnline.Web.ViewModels.Responses;
+﻿namespace BoleteriaOnline.Core.ViewModels.Responses;
 public class LoginResponse
 {
-    public string? Token { get; set; }
+    public string Token { get; set; }
 }

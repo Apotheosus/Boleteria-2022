@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace BoleteriaOnline.Web.Extensions.Response;
+namespace BoleteriaOnline.Core.Extensions.Response;
 public enum SuccessMessage
 {
     [Description("{Gender:El|La} {Entity} se creó correctamente.")]

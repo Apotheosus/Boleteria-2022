@@ -1,4 +1,4 @@
-﻿namespace BoleteriaOnline.Web.ViewModels.Responses;
+﻿namespace BoleteriaOnline.Core.ViewModels.Responses;
 public class DistribucionResponse
 {
     public int Id { get; set; }

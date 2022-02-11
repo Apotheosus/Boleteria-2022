@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BoleteriaOnline.Core.Data.Enums;
 
-namespace BoleteriaOnline.Web.ViewModels.Requests;
+namespace BoleteriaOnline.Core.ViewModels.Requests;
 public class FilaRequest
 {
     [Required, Display(Name = "celdas")]

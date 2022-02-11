@@ -1,6 +1,6 @@
 ﻿using BoleteriaOnline.Core.Data.Enums;
 
-namespace BoleteriaOnline.Web.ViewModels.Requests;
+namespace BoleteriaOnline.Core.ViewModels.Requests;
 
 public class CeldaRequest
 {

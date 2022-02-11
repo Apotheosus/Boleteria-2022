@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BoleteriaOnline.Web.Data;
-using BoleteriaOnline.Web.Repository.Interface;
 using BoleteriaOnline.Web.Data.Models;
+using BoleteriaOnline.Web.Repositories;
 
 namespace BoleteriaOnline.Web.Repository;
 
@@ -24,7 +24,7 @@ public class NodoRepository : INodoRepository
 
     public async Task<bool> DeleteNodoAsync(long id)
     {
-        Nodo? nodo = await GetNodoAsync(id);
+        Nodo nodo = await GetNodoAsync(id);
         return nodo == null ? false : await DeleteNodoAsync(nodo);
     }
 
@@ -39,7 +39,7 @@ public class NodoRepository : INodoRepository
 
     public async Task<bool> ExistsNodoAsync(long id) => await _context.Nodos.AnyAsync(e => e.Id == id);
 
-    public async Task<Nodo?> GetNodoAsync(long id) => await _context.Nodos.FirstOrDefaultAsync(m => m.Id == id);
+    public async Task<Nodo> GetNodoAsync(long id) => await _context.Nodos.FirstOrDefaultAsync(m => m.Id == id);
 
     public async Task<ICollection<Nodo>> GetNodosAsync() => await _context.Nodos.ToListAsync();
 

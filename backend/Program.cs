@@ -1,17 +1,15 @@
 using System.Globalization;
 using System.Reflection;
 using System.Text;
-using BoleteriaOnline.Core.Repositories;
 using BoleteriaOnline.Core.Services;
+using BoleteriaOnline.Core.Utils;
 using BoleteriaOnline.Web.Data;
 using BoleteriaOnline.Web.Filters;
 using BoleteriaOnline.Web.Localization;
 using BoleteriaOnline.Web.Middlewares;
+using BoleteriaOnline.Web.Repositories;
 using BoleteriaOnline.Web.Repository;
-using BoleteriaOnline.Web.Repository.Interface;
 using BoleteriaOnline.Web.Services;
-using BoleteriaOnline.Web.Services.Interface;
-using BoleteriaOnline.Web.Utils;
 using EntityFramework.Exceptions.MySQL.Pomelo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -171,7 +169,7 @@ app.UseEndpoints(endpoints =>
 app.UseOpenApi();
 app.UseSwaggerUi3(options =>
 {
-    options.DocumentTitle = "Sistema de Exámenes Gex";
+    options.DocumentTitle = "Boletaria Online";
 });
 
 app.Run();

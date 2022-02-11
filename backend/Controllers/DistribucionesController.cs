@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using BoleteriaOnline.Web.Utils;
 using BoleteriaOnline.Web.Extensions.Response;
-using BoleteriaOnline.Web.ViewModels.Responses;
-using BoleteriaOnline.Web.ViewModels.Requests;
 using BoleteriaOnline.Core.Services;
 using BoleteriaOnline.Core.Data.Enums;
+using BoleteriaOnline.Core.ViewModels.Requests;
+using BoleteriaOnline.Core.ViewModels.Responses;
+using BoleteriaOnline.Core.Utils;
 
 namespace BoleteriaOnline.Web.Controllers;
 
@@ -63,9 +63,9 @@ public class DistribucionesController : ControllerBase
 
     [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WebResult<DistribucionResponse>))]
-    public async Task<ActionResult<WebResult<DistribucionResponse>>> UpdateDistribucion([FromBody] DistribucionUpdateRequest distribucionDto, long id)
+    public async Task<ActionResult<WebResult<DistribucionResponse>>> UpdateDistribucion([FromBody] DistribucionUpdateRequest distribucionDto)
     {
-        var distribucion = await _distribucionservice.UpdateDistribucionAsync(distribucionDto, id);
+        var distribucion = await _distribucionservice.UpdateDistribucionAsync(distribucionDto);
 
         if (!distribucion.Success)
             return StatusCode(ResponseHelper.GetHttpError(distribucion.ErrorCode), distribucion);

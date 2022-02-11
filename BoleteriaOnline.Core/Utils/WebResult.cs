@@ -1,6 +1,6 @@
-﻿using BoleteriaOnline.Web.Extensions.Response;
+﻿using BoleteriaOnline.Core.Extensions.Response;
 
-namespace BoleteriaOnline.Web.Utils;
+namespace BoleteriaOnline.Core.Utils;
 public class WebResult<T> where T : class
 {
     public T Result { get; set; }
@@ -8,5 +8,5 @@ public class WebResult<T> where T : class
     public string Message { get; set; } = null;
     public IDictionary<string, string[]> ErrorMessages { get; set; } = null;
     public ErrorMessage ErrorCode { get; set; }
-    public string Error { get; set; } 
+    public string Error { get; set; }
 }

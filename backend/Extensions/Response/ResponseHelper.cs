@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BoleteriaOnline.Core.Extensions.Response;
+using Microsoft.AspNetCore.Http;
 
 namespace BoleteriaOnline.Web.Extensions.Response;
 public static class ResponseHelper

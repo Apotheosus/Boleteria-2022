@@ -1,6 +1,6 @@
 ﻿using Humanizer;
 
-namespace BoleteriaOnline.Web.Attributes
+namespace BoleteriaOnline.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class HumanDescriptionAttribute : Attribute

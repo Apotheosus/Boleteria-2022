@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using BoleteriaOnline.Web.Attributes;
+using BoleteriaOnline.Core.Attributes;
 
-namespace BoleteriaOnline.Web.ViewModels.Requests;
+namespace BoleteriaOnline.Core.ViewModels.Requests;
 public class NodoRequest
 {
     [Display(Name = "identificador")]

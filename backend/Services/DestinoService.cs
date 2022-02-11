@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using BoleteriaOnline.Core.Data.Enums;
+using BoleteriaOnline.Core.Extensions.Response;
+using BoleteriaOnline.Core.Services;
+using BoleteriaOnline.Core.Utils;
+using BoleteriaOnline.Core.ViewModels.Requests;
+using BoleteriaOnline.Core.ViewModels.Responses;
 using BoleteriaOnline.Web.Data.Models;
-using BoleteriaOnline.Web.Extensions.Response;
-using BoleteriaOnline.Web.Repository.Interface;
-using BoleteriaOnline.Web.Services.Interface;
-using BoleteriaOnline.Web.Utils;
-using BoleteriaOnline.Web.ViewModels.Requests;
-using BoleteriaOnline.Web.ViewModels.Responses;
+using BoleteriaOnline.Web.Repositories;
 using EntityFramework.Exceptions.Common;
 
 namespace BoleteriaOnline.Web.Services;
@@ -49,9 +49,6 @@ public class DestinoService : IDestinoService
             var destino = await _destinoRepository.GetDestinoAsync(id);
             if (destino == null)
                 return Error<Destino, DestinoResponse>(ErrorMessage.NotFound);
-
-            if (destino.Estado == Estado.BAJA)
-                return Error<Destino, DestinoResponse>(ErrorMessage.AlreadyDeleted);
 
             if (!await _destinoRepository.DeleteDestinoAsync(destino))
                 return Error<Destino, DestinoResponse>(ErrorMessage.CouldNotDelete);
