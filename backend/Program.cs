@@ -84,10 +84,13 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseMySql(connectionString, new MariaDbServerVersion(new Version(10, 4, 17)), o =>
+    options.UseSqlServer(connectionString);
+    /*
+    options.UseSqlServer(connectionString, new MariaDbServerVersion(new Version(10, 4, 17)), o =>
     {
         o.EnableRetryOnFailure();
     });
+    */
     options.LogTo(Console.WriteLine, LogLevel.Information);
     options.EnableSensitiveDataLogging();
     options.EnableDetailedErrors();

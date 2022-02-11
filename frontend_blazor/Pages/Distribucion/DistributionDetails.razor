@@ -1,75 +1,52 @@
-﻿@page "/distribucion/{id:int}"
-@using BoleteriaOnline.Web.ViewModels.Requests
-
-
-@inject IDistribucionService DistribucionService
-
-<RadzenLabel Text="Detalles de distribución"/>
+﻿@inject IDistribucionService DistribucionService
+@inject DialogService DialogService
 
 @if (distribucion != null)
 {
-    <h2>PLANTA BAJA</h2>
-    @foreach (var fila in distribucion.Filas.Where(f => f.Planta == Planta.BAJA))
-    {
-        <div class="row">
-            @foreach (var celda in fila.Cells)
+
+    <h4 class="mb-4">@distribucion.Nota</h4>
+
+
+    <RadzenSwitch @bind-Value=@distribucion.UnPiso Disabled="true" />
+
+    <RadzenTabs TabPosition="TabPosition.Top" RenderMode="TabRenderMode.Client">
+        <Tabs>
+            <RadzenTabsItem Text="Planta Baja">
+                <PlantaBus Filas=@distribucion.Filas Planta=@Planta.BAJA />
+            </RadzenTabsItem>
+            @if (!distribucion.UnPiso)
             {
-                <div class="col-1 p-1">
-                    <RadzenButton Text="@GetButtonText(celda.Value)" Click=@(args => OnClick(celda)) ButtonStyle="@GetButtonStyle(celda.Value)"/>
-                </div>
+                <RadzenTabsItem Text="Planta Alta">
+                    <PlantaBus Filas=@distribucion.Filas Planta=@Planta.ALTA />
+                </RadzenTabsItem>
             }
+        </Tabs>
+    </RadzenTabs>
+
+    <div class="row mt-4">
+        <div class="col">
+            <RadzenButton Text="Refresh" Click=@(args => GuardarCambios()) ButtonStyle="ButtonStyle.Light" Class="mr-1 float-right" />
         </div>
-    }
-    <RadzenButton Text="Guardar cambios" Click=@(args => GuardarCambios())/>
+    </div>
 
-    <h2>PLANTA ALTA</h2>
-    foreach (var fila in distribucion.Filas.Where(f => f.Planta == Planta.ALTA))
-    {
-        <p>@fila.Id</p>
-        <p>@fila.Planta</p>
-    }
+
 }
-
 
 @code {
 
     [Parameter]
     public int Id { get; set; }
 
-    DistribucionResponse distribucion;
-
-    ButtonStyle GetButtonStyle(DistribucionEspacio espacio)
-    {
-        return espacio switch
-        {
-            DistribucionEspacio.ESPACIO_BUTACA => ButtonStyle.Success,
-            DistribucionEspacio.ESPACIO_NULL => ButtonStyle.Info,
-            DistribucionEspacio.ESPACIO_PASILLO => ButtonStyle.Light,
-            DistribucionEspacio.ESPACIO_TV => ButtonStyle.Danger,
-            _ => ButtonStyle.Warning
-        };
-    }
-
-    string GetButtonText(DistribucionEspacio espacio)
-    {
-        return espacio switch
-        {
-            DistribucionEspacio.ESPACIO_BUTACA => "B",
-            DistribucionEspacio.ESPACIO_NULL => "N",
-            DistribucionEspacio.ESPACIO_PASILLO => "P",
-            DistribucionEspacio.ESPACIO_TV => "T",
-            _ => "D"
-        };
-    }
+    DistribucionResponse distribucion { get; set; }
 
     async Task GuardarCambios()
     {
         List<FilaUpdateRequest> filaUpdateRequests = new();
         DistribucionUpdateRequest request = new() { Nota = distribucion.Nota, UnPiso = distribucion.UnPiso, Filas = filaUpdateRequests };
-        foreach(var fila in distribucion.Filas)
+        foreach (var fila in distribucion.Filas)
         {
             List<CeldaUpdateRequest> celdas = new List<CeldaUpdateRequest>();
-            foreach(var celda in fila.Cells)
+            foreach (var celda in fila.Cells)
             {
                 celdas.Add(new CeldaUpdateRequest() { Id = celda.Id, Value = celda.Value });
             }
@@ -81,22 +58,6 @@
         await ReloadDistribution();
     }
 
-    void OnClick(CeldaResponse celda)
-    {
-        var values = Enum.GetValues<DistribucionEspacio>();
-
-        celda.Value = values[new Random().Next(values.Length)];
-
-
-        if (distribucion != null)
-        {
-
-
-        }
-
-        //Console.WriteLine($"{buttonName} clicked");
-    }
-
     async Task ReloadDistribution()
     {
         var response = await DistribucionService.GetDistribucionAsync(Id);
@@ -106,7 +67,7 @@
             distribucion = response.Result;
         }
         else
-            Console.WriteLine(response.Message);        
+            Console.WriteLine(response.Message);
     }
 
     protected override async Task OnInitializedAsync()

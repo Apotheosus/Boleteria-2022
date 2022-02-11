@@ -1,8 +1,6 @@
 using BoleteriaOnline.Core.Services;
 using frontend_blazor.Data;
 using frontend_blazor.Services;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7203") });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7203/api/") });
 builder.Services.AddScoped<IDistribucionService, DistribucionService>();
+builder.Services.AddScoped<IDestinoService, DestinoService>();
 builder.Services.AddScoped<DialogService>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<TooltipService>();
+builder.Services.AddScoped<ContextMenuService>();
 
 var app = builder.Build();
 
