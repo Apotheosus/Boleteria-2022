@@ -15,7 +15,7 @@ public class DestinoService : IDestinoService
     public DestinoService(HttpClient client)
     {
         _client = client;
-        _url = "destinos";
+        _url = "api/destinos";
         _options = new JsonSerializerOptions { PropertyNamingPolicy = new SnakeCaseNamingPolicy() };
     }
 

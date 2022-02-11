@@ -15,7 +15,7 @@ public class ViajeService : IViajeService
     public ViajeService(HttpClient client)
     {
         _client = client;
-        _url = "viajes";
+        _url = "api/viajes";
         _options = new JsonSerializerOptions { PropertyNamingPolicy = new SnakeCaseNamingPolicy() };
     }
 

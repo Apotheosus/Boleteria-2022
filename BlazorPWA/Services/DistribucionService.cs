@@ -16,7 +16,7 @@ public class DistribucionService : IDistribucionService
     public DistribucionService(HttpClient client)
     {
         _client = client;
-        _url = "distribuciones";
+        _url = "api/distribuciones";
         _options = new JsonSerializerOptions { PropertyNamingPolicy = new SnakeCaseNamingPolicy() };
     }
 
