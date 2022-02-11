@@ -42,9 +42,5 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\BoleteriaOnline.Core\BoleteriaOnline.Core.csproj" />
 	</ItemGroup>
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="swagger tofile --output swagger.json $(OutputPath)\$(AssemblyName).dll v1 " />
-	</Target>	
 	
 </Project>
