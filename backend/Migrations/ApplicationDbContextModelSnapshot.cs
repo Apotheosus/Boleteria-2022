@@ -3,6 +3,7 @@ using System;
 using BoleteriaOnline.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -17,7 +18,9 @@ namespace BoleteriaOnline.Web.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("BoleteriaOnline.Web.Data.Models.Boleto", b =>
                 {
@@ -25,6 +28,8 @@ namespace BoleteriaOnline.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Asiento")
                         .HasColumnType("int")
@@ -35,27 +40,27 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("destino_id");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("estado");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("fecha");
 
                     b.Property<DateTime>("FechaEmision")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("fecha_emision");
 
                     b.Property<string>("HoraLlegada")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("hora_llegada");
 
                     b.Property<string>("HoraSalida")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("hora_salida");
 
                     b.Property<string>("HoraSalidaAdicional")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("hora_salida_adicional");
 
                     b.Property<int?>("OrigenId")
@@ -71,7 +76,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("pasajero_id");
 
                     b.Property<string>("Precio")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("precio");
 
                     b.Property<int?>("RecorridoId")
@@ -113,8 +118,10 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<int>("FilaId")
@@ -122,7 +129,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("fila_id");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Value")
@@ -145,8 +152,10 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<int>("Estado")
@@ -154,7 +163,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("estado");
 
                     b.Property<DateTime>("FechaNac")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("fecha_nac");
 
                     b.Property<int?>("Genero")
@@ -163,16 +172,16 @@ namespace BoleteriaOnline.Web.Migrations
 
                     b.Property<string>("Nacionalidad")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("nacionalidad");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("nombre");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
@@ -188,17 +197,19 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Nombre")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("nombre");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
@@ -206,7 +217,8 @@ namespace BoleteriaOnline.Web.Migrations
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasDatabaseName("ix_destinos_nombre");
+                        .HasDatabaseName("ix_destinos_nombre")
+                        .HasFilter("[nombre] IS NOT NULL");
 
                     b.ToTable("destinos", (string)null);
                 });
@@ -218,21 +230,23 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Nota")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasColumnName("nota");
 
                     b.Property<bool>("UnPiso")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("un_piso");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
@@ -240,7 +254,8 @@ namespace BoleteriaOnline.Web.Migrations
 
                     b.HasIndex("Nota")
                         .IsUnique()
-                        .HasDatabaseName("ix_distribuciones_nota");
+                        .HasDatabaseName("ix_distribuciones_nota")
+                        .HasFilter("[nota] IS NOT NULL");
 
                     b.ToTable("distribuciones", (string)null);
                 });
@@ -251,6 +266,8 @@ namespace BoleteriaOnline.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("DistribucionId")
                         .HasColumnType("int")
@@ -276,36 +293,38 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("DistribucionId")
                         .HasColumnType("int")
                         .HasColumnName("distribucion_id");
 
                     b.Property<bool>("Domingo")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("domingo");
 
                     b.Property<DateTime>("Hora")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("hora");
 
                     b.Property<bool>("Jueves")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("jueves");
 
                     b.Property<bool>("Lunes")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("lunes");
 
                     b.Property<bool>("Martes")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("martes");
 
                     b.Property<bool>("Miercoles")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("miercoles");
 
                     b.Property<bool>("Sabado")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("sabado");
 
                     b.Property<int?>("ViajeId")
@@ -313,7 +332,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("viaje_id");
 
                     b.Property<bool>("Viernes")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("viernes");
 
                     b.HasKey("Id")
@@ -332,13 +351,15 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Demora")
                         .HasMaxLength(5)
-                        .HasColumnType("varchar(5)")
+                        .HasColumnType("nvarchar(5)")
                         .HasColumnName("demora");
 
                     b.Property<int?>("DestinoId")
@@ -350,11 +371,11 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("origen_id");
 
                     b.Property<float>("Precio")
-                        .HasColumnType("float")
+                        .HasColumnType("real")
                         .HasColumnName("precio");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
                     b.Property<int?>("ViajeId")
@@ -383,16 +404,18 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("Boleto")
                         .HasColumnType("int")
                         .HasColumnName("boleto");
 
                     b.Property<string>("Codigo")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("codigo");
 
                     b.Property<string>("Correo")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("correo");
 
                     b.Property<long>("Dni")
@@ -400,7 +423,7 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("dni");
 
                     b.Property<DateTime>("Fecha_vencimiento")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("fecha_vencimiento");
 
                     b.Property<long>("Nro_tarjeta")
@@ -412,15 +435,15 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("precio");
 
                     b.Property<string>("Tarjeta")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("tarjeta");
 
                     b.Property<string>("Tipo")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("tipo");
 
                     b.Property<string>("Titular")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("titular");
 
                     b.HasKey("Id")
@@ -436,28 +459,30 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int")
                         .HasColumnName("access_failed_count");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("birth_date");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("email_confirmed");
 
                     b.Property<int>("Gender")
@@ -465,44 +490,44 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("gender");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("lockout_enabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("lockout_end");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("normalized_email");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("normalized_user_name");
 
                     b.Property<string>("Password")
                         .HasMaxLength(150)
-                        .HasColumnType("varchar(150)")
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("password");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("password_hash");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("phone_number");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("phone_number_confirmed");
 
                     b.Property<string>("Salt")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("salt");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("security_stamp");
 
                     b.Property<int>("Tipo")
@@ -510,16 +535,16 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnName("tipo");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("two_factor_enabled");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("user_name");
 
                     b.Property<string>("Username")
                         .HasMaxLength(25)
-                        .HasColumnType("varchar(25)")
+                        .HasColumnType("nvarchar(25)")
                         .HasColumnName("username");
 
                     b.HasKey("Id")
@@ -535,17 +560,19 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Nombre")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("nombre");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
@@ -553,7 +580,8 @@ namespace BoleteriaOnline.Web.Migrations
 
                     b.HasIndex("Nombre")
                         .IsUnique()
-                        .HasDatabaseName("ix_viajes_nombre");
+                        .HasDatabaseName("ix_viajes_nombre")
+                        .HasFilter("[nombre] IS NOT NULL");
 
                     b.ToTable("viajes", (string)null);
                 });
@@ -561,22 +589,22 @@ namespace BoleteriaOnline.Web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("name");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("normalized_name");
 
                     b.HasKey("Id")
@@ -584,7 +612,8 @@ namespace BoleteriaOnline.Web.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[normalized_name] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -596,17 +625,19 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("ClaimType")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("claim_value");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("role_id");
 
                     b.HasKey("Id")
@@ -621,7 +652,7 @@ namespace BoleteriaOnline.Web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("id");
 
                     b.Property<int>("AccessFailedCount")
@@ -630,59 +661,59 @@ namespace BoleteriaOnline.Web.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("email");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("email_confirmed");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("lockout_enabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("lockout_end");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("normalized_email");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("normalized_user_name");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("password_hash");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("phone_number");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("phone_number_confirmed");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("security_stamp");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("two_factor_enabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("user_name");
 
                     b.HasKey("Id")
@@ -693,7 +724,8 @@ namespace BoleteriaOnline.Web.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[normalized_user_name] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -705,17 +737,19 @@ namespace BoleteriaOnline.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("ClaimType")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("claim_value");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
@@ -730,20 +764,20 @@ namespace BoleteriaOnline.Web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("login_provider");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("provider_key");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("provider_display_name");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
@@ -758,11 +792,11 @@ namespace BoleteriaOnline.Web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId")
@@ -777,19 +811,19 @@ namespace BoleteriaOnline.Web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("login_provider");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("name");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
